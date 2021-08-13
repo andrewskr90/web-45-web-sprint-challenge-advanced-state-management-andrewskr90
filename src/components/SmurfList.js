@@ -5,9 +5,10 @@ import { connect } from 'react-redux'
 
 
  const SmurfList = (props)=> {
-    const { isLoading, smurfs } = props
+    const { isLoading, smurfs, fetchError } = props
 
     const loading = isLoading;
+    const error = fetchError
     const testSmurf = {
         id:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9",
         name:'Poppa Smurf',
@@ -19,10 +20,13 @@ import { connect } from 'react-redux'
     if (loading) {
         return <h1>Loading...</h1>;
     }
-    console.log(smurfs)
+    if(error) {
+        return <h1>Fetch Error: {error}</h1>
+    }
+
     return(<div className="listContainer">
         {smurfs.map((item) => {
-            return (<Smurf smurf={item}/>)
+            return (<Smurf key={item.id} smurf={item}/>)
         })}
     </div>);
 }
@@ -30,7 +34,8 @@ import { connect } from 'react-redux'
 const mapStateToProps = (state) => {
     return {
         isLoading: state.isLoading,
-        smurfs: state.smurfs
+        smurfs: state.smurfs,
+        fetchError: state.fetchError
     }
 }
 
